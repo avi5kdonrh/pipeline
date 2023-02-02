@@ -233,6 +233,7 @@
                                 </pod>
                                 </labels>
                             </resources>
+                            <buildStrategy>docker</buildStrategy>
                         </configuration>
                     </plugin>
                 </plugins>
