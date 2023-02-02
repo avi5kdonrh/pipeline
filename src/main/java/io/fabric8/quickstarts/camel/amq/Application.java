@@ -15,11 +15,12 @@
  */
 package io.fabric8.quickstarts.camel.amq;
 
-import org.apache.activemq.jms.pool.PooledConnectionFactory;
-import org.apache.camel.component.amqp.AMQPComponent;
-import org.apache.qpid.jms.JmsConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory;
+import org.apache.camel.component.jms.JmsComponent;
+import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -34,26 +35,26 @@ public class Application {
 
     Logger log = LoggerFactory.getLogger(Application.class);
 
+    @Autowired
+    CoreConfiguration coreConfiguration;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean(name = "amqp-component")
-    AMQPComponent amqpComponent(AMQPConfiguration config) {
+    @Bean(name = "jms")
+    JmsComponent jms(CoreConfiguration config) {
 
-        String protocol = config.getProtocol();
 
-        String port = "amqps".equals(protocol) ? config.getServicePort_amqps(): config.getServicePort_amqp();
+        String remoteURI = config.getUrl();
 
-        String remoteURI = String.format(protocol+"://%s:%s?%s", config.getServiceName(), port, config.getParameters());
-
-        JmsConnectionFactory qpid = new JmsConnectionFactory(config.getUsername(), config.getPassword(), remoteURI);
-
-        PooledConnectionFactory factory = new PooledConnectionFactory();
-        factory.setConnectionFactory(qpid);
-
-        return new AMQPComponent(factory);
+        ActiveMQJMSConnectionFactory activeMQConnectionFactory = new ActiveMQJMSConnectionFactory(remoteURI, config.getUser(), config.getPassword());
+        JmsPoolConnectionFactory jmsPoolConnectionFactory = new JmsPoolConnectionFactory();
+        jmsPoolConnectionFactory.setMaxConnections(coreConfiguration.getMaxConnections());
+        jmsPoolConnectionFactory.setMaxSessionsPerConnection(coreConfiguration.getMaxSessionsPerConnection());
+        JmsComponent jmsComponent = new JmsComponent();
+        jmsComponent.setConnectionFactory(jmsPoolConnectionFactory);
+        return jmsComponent;
     }
 
 }

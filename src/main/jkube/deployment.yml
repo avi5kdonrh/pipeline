@@ -1,6 +1,10 @@
 spec:
   template:
     spec:
+      volumes:
+        - name: foo
+          secret:
+            secretName: secret1
       containers:
         -
           resources:
@@ -10,26 +14,44 @@ spec:
             limits:
               cpu: "1.0"
               memory: 256Mi
+          volumeMounts:
+            - name: foo
+              readOnly: true
+              mountPath: /opt/amq
           env:
-          - name: AMQ_CAMEL_SERVICE_NAME
+          - name: url
             valueFrom:
               configMapKeyRef:
                 name: spring-boot-camel-amq-config
-                key: service.host
-          - name: AMQ_CAMEL_SERVICE_PORT_AMQPS
+                key: url
+          - name: userName
             valueFrom:
               configMapKeyRef:
                 name: spring-boot-camel-amq-config
-                key: service.port.amqps
-          - name: AMQ_CAMEL_SERVICE_PORT_AMQP
+                key: userName
+          - name: password
             valueFrom:
               configMapKeyRef:
                 name: spring-boot-camel-amq-config
-                key: service.port.amqp
-          - name: AMQ_CAMEL_PARAMETERS
-            value: transport.trustAll=true&transport.verifyHost=false&amqp.idleTimeout=120000&amqp.saslMechanisms=PLAIN
-          - name: AMQ_CAMEL_PROTOCOL
+                key: password
+          - name: queues
             valueFrom:
               configMapKeyRef:
-                name: spring-boot-camel-amq-protocol
-                key: service.protocol
+                name: spring-boot-camel-amq-config
+                key: queues
+          - name: queuer
+            valueFrom:
+              configMapKeyRef:
+                name: spring-boot-camel-amq-config
+                key: queuer
+          - name: maxConnections
+            valueFrom:
+              configMapKeyRef:
+                name: spring-boot-camel-amq-config
+                key: maxConnections
+          - name: maxSessionsPerConnection
+            valueFrom:
+              configMapKeyRef:
+                name: spring-boot-camel-amq-config
+                key: maxSessionsPerConnection
+
