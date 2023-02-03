@@ -17,7 +17,7 @@
         <route id="generate-order-route" streamCache="true">
             <from id="route-timer" uri="jetty:http://0.0.0.0:9091/test"/>
             <log id="route-log-order" message="Incoming Request"/>
-            <to id="route-to-incoming-orders" uri="jms:queue:{{queues}}"/>
+            <to id="route-to-incoming-orders" uri="jms:queue:{{queues}}?disableReplyTo=true"/>
         </route>
         <!--
           This route consumes messages from the JMS queue incomingOrders on the ActiveMQ broker within the ESB.
