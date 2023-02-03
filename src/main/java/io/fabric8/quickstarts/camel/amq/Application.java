@@ -44,14 +44,12 @@ public class Application {
 
     @Bean(name = "jms")
     JmsComponent jms(CoreConfiguration config) {
-
-
         String remoteURI = config.getUrl();
-
         ActiveMQJMSConnectionFactory activeMQConnectionFactory = new ActiveMQJMSConnectionFactory(remoteURI, config.getUser(), config.getPassword());
         JmsPoolConnectionFactory jmsPoolConnectionFactory = new JmsPoolConnectionFactory();
         jmsPoolConnectionFactory.setMaxConnections(coreConfiguration.getMaxConnections());
         jmsPoolConnectionFactory.setMaxSessionsPerConnection(coreConfiguration.getMaxSessionsPerConnection());
+        jmsPoolConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
         JmsComponent jmsComponent = new JmsComponent();
         jmsComponent.setConnectionFactory(jmsPoolConnectionFactory);
         return jmsComponent;
