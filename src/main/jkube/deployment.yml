@@ -1,10 +1,6 @@
 spec:
   template:
     spec:
-      volumes:
-        - name: foo
-          secret:
-            secretName: secret1
       containers:
         -
           resources:
