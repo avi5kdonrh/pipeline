@@ -26,6 +26,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 
+import javax.jms.ConnectionFactory;
+
 /**
  * The Spring-boot main class.
  */
@@ -53,6 +55,13 @@ public class Application {
         JmsComponent jmsComponent = new JmsComponent();
         jmsComponent.setConnectionFactory(jmsPoolConnectionFactory);
         return jmsComponent;
+    }
+
+    @Bean
+    public ConnectionFactory connectionFactory(CoreConfiguration config) {
+
+        ActiveMQJMSConnectionFactory activeMQConnectionFactory = new ActiveMQJMSConnectionFactory(config.getUrl(), config.getUser(), config.getPassword());
+        return activeMQConnectionFactory;
     }
 
 }
