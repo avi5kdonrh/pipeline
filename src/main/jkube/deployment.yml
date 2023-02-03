@@ -18,6 +18,7 @@ spec:
             - name: foo
               readOnly: true
               mountPath: /opt/amq
+          image: image-registry.openshift-image-registry.svc:5000/pl/camel-amq-sb:latest
           env:
           - name: url
             valueFrom:
