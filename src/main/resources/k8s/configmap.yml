@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: spring-boot-camel-amq-config
 data:
-  url: tcp://example:5672
+  url: tcp://amq-svc.broker.svc.cluster.local:61616
   userName: admin
   password: admin
   queues: sendq
