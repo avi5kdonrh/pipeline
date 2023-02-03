@@ -11,19 +11,19 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "amq-camel")
 public class CoreConfiguration {
 
-    @Value("${url}")
+    @Value("${url:tcp://localhost:61616}")
     private String url;
 
-    @Value("${userName}")
+    @Value("${userName:admin}")
     private String user;
 
-    @Value("${password}")
+    @Value("${password:admin}")
     private String password;
 
-    @Value("${maxConnections}")
+    @Value("${maxConnections:25}")
     private int maxConnections;
 
-    @Value("${maxSessionsPerConnection}")
+    @Value("${maxSessionsPerConnection:1}")
     private int maxSessionsPerConnection;
     public String getUrl() {
         return url;
