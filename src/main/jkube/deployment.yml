@@ -10,10 +10,6 @@ spec:
             limits:
               cpu: "1.0"
               memory: 256Mi
-          volumeMounts:
-            - name: foo
-              readOnly: true
-              mountPath: /opt/amq
           image: image-registry.openshift-image-registry.svc:5000/pl/camel-amq-sb:latest
           env:
           - name: url
