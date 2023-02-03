@@ -8,5 +8,5 @@ data:
   password: admin
   queues: sendq
   queuer: recvq
-  maxConnections: 25
-  maxSessionsPerConnection: 1
+  maxConnections: "25"
+  maxSessionsPerConnection: "1"
